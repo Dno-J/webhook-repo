@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitHub Actions Feed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            background: #fff;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Latest GitHub Events</h1>
+    <ul id="event-list"></ul>
+
+    <script>
+        function fetchEvents() {
+            fetch('/webhook/events')
+                .then(response => response.json())
+                .then(data => {
+                    const list = document.getElementById('event-list');
+                    list.innerHTML = '';
+                    data.forEach(event => {
+                        const item = document.createElement('li');
+                        item.textContent = event;
+                        list.appendChild(item);
+                    });
+                });
+        }
+
+        fetchEvents(); // initial load
+        setInterval(fetchEvents, 15000); // poll every 15 seconds
+    </script>
+</body>
+</html>

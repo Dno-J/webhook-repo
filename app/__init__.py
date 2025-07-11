@@ -1,14 +1,12 @@
 from flask import Flask
+from .extensions import mongo
+from .webhook import webhook_bp  # ✅ This will now work
 
-from app.webhook.routes import webhook
-
-
-# Creating our flask app
 def create_app():
-
     app = Flask(__name__)
-    
-    # registering all the blueprints
-    app.register_blueprint(webhook)
-    
+    app.config["MONGO_URI"] = "mongodb://localhost:27017/github_events"
+    mongo.init_app(app)
+
+    app.register_blueprint(webhook_bp)
+
     return app
